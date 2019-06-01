@@ -8,8 +8,15 @@ class InvitedEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.InvitedEvent
         fields = ('title','creator','description','time','created_on','location','invitedUsers')
+    
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.comments
         fields = ( 'content','user','Event','pub_date')
-      
+    
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = ( 'email','password','first_name','last_name')
+

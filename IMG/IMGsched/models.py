@@ -19,6 +19,8 @@ class GeneralEvent(models.Model):
     time = models.DateTimeField()
     created_on = models.DateTimeField(default = timezone.now)
     location = models.CharField(max_length = 50)
+    class Meta:
+        ordering = ('time','title')
 
 class InvitedEvent(models.Model):
         
@@ -29,6 +31,11 @@ class InvitedEvent(models.Model):
     created_on = models.DateTimeField(default = timezone.now)
     location = models.CharField(max_length = 50)
     invitedUsers = models.ManyToManyField(User,related_name='usersinvited')
+    class Meta:
+        ordering = ('time','title')
+
+
+
 class comments(models.Model):
     content = models.CharField(max_length=(100))
     user = models.ForeignKey(User,on_delete=models.PROTECT)
