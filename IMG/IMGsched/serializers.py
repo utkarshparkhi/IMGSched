@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from . import models
+from django.contrib.auth.models import User
 class GeneralEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.GeneralEvent
@@ -15,8 +16,15 @@ class CommentSerializer(serializers.ModelSerializer):
         model = models.comments
         fields = ( 'content','user','Event','pub_date')
     
-class UserSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(serializers.ModelSerializer):
+    def create(self,validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
     class Meta:
-        model = models.User
-        fields = ( 'email','password','first_name','last_name')
+        model = User
+        fields = ( 'username','email','password','first_name','last_name')
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
 

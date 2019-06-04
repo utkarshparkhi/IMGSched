@@ -1,11 +1,8 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 # Create your models here.
-class User(models.Model):
-    email = models.EmailField(unique= True)
-    password = models.CharField(max_length =(16))
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
+
 
 
 
@@ -41,4 +38,5 @@ class comments(models.Model):
     user = models.ForeignKey(User,on_delete=models.PROTECT)
     Event = models.ForeignKey(GeneralEvent,on_delete=models.CASCADE)
     pub_date = models.DateTimeField(default = timezone.now)
-
+    class Meta:
+        ordering = ['pub_date']

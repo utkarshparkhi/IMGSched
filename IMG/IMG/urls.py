@@ -18,5 +18,6 @@ from django.urls import path,include
 from IMGsched import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include(urls))
+    path('IMGsched/',include(urls)),
+    path('o/',include('oauth2_provider.urls',namespace='oauth2_provider'))
 ]

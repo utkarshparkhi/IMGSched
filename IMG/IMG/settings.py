@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'IMGsched.apps.ImgschedConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'IMGsched.apps.ImgschedConfig'
+    
+    'oauth2_provider',
+    
 ]
 
 MIDDLEWARE = [
@@ -49,7 +52,22 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware', # This needs to be first
+    'oauth2_provider.middleware.OAuth2TokenMiddleware'
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.SessionAuthentication', # To keep the Browsable API
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # To keep the Browsable API
+    'oauth2_provider.backends.OAuth2Backend',
+)
 
 ROOT_URLCONF = 'IMG.urls'
 
@@ -78,7 +96,7 @@ WSGI_APPLICATION = 'IMG.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'IMG',
+        'NAME':'IMG2',
         "USER":'utkarsh',
         "PASSWORD":'pass',
     }
