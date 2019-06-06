@@ -19,5 +19,6 @@ from IMGsched import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('IMGsched/',include(urls)),
-    path('o/',include('oauth2_provider.urls',namespace='oauth2_provider'))
+    path('o/',include('oauth2_provider.urls',namespace='oauth2_provider')),
+    path('authentication/',include('users.urls')),
 ]

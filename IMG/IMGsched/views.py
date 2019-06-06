@@ -5,102 +5,20 @@ from rest_framework.response import Response
 from . import serializers
 from rest_framework import status
 from django.utils import timezone
-from rest_framework.permissions import AllowAny
-from .serializers import CreateUserSerializer
+from rest_framework.permissions import AllowAny,IsAuthenticated
+
 from django.db.models import Q
 
 import requests
 
-CLIENT_ID = 'CgZ1K9yegmJRtTNf1JONio0yK1aqj4ZHR2Dg81gX'
-CLIENT_SECRET = '173EkmYE87gNqB8bLrqp84MHIkYjgZB3xsrKwAPaZbwgOTgzA4PfN6t7wGZFAg8sqmmznkawxaBQXCAxFvjIvUzcSRW3bJotVOVCCHOfKPAl87wwS47ySyJtdXdGHW1m'
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def register(request):
-        '''
-        Registers user to the server. Input should be in the format:
-        {"username": "username", "password": "1234abcd","first_name":"first","last_name":"last"}
-        '''
-        # Put the data from the request into the serializer 
-        serializer = CreateUserSerializer(data=req/uest.data) 
-        # Validate the data
-        if serializer.is_valid():
-                # If it is valid, save the data (creates a user).
-                serializer.save() 
-                # Then we get a token for the created user.
-                # This could be done differentley 
-                d = request.data
-                d['client_id'] = CLIENT_ID
-                d['client_secret'] = CLIENT_SECRET
-                d['grant_type'] = 'password'
-                r = requests.post('http://127.0.0.1:8000/o/token/', 
-                        data=d
-                )
-                return Response(r.json())
-        return Response(serializer.errors)
-
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def token(request):
-    
-        d = request.data
-        d['client_id'] = CLIENT_ID
-        d['client_secret'] = CLIENT_SECRET
-        d['grant_type'] = 'password'
-        
-        r = requests.post('http://127.0.0.1:8000/o/token/', 
-                data=d,
-        )
-        return Response(r.json())
-
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def refresh_token(request):
-    '''
-    Registers user to the server. Input should be in the format:
-    {"refresh_token": "<token>"}
-    '''
-    r = requests.post(
-    'http://127.0.0.1:8000/o/token/', 
-        data={
-            'grant_type': 'refresh_token',
-            'refresh_token': request.data['refresh_token'],
-            'client_id': CLIENT_ID,
-            'client_secret': CLIENT_SECRET,
-        },
-    )
-    return Response(r.json())
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def revoke_token(request):
-    '''
-    Method to revoke tokens.
-    {"token": "<token>"}
-    '''
-    r = requests.post(
-        'http://127.0.0.:8000/o/revoke_token/', 
-        data={
-            'token': request.data['token'],
-            'client_id': CLIENT_ID,
-            'client_secret': CLIENT_SECRET,
-        },
-    )
-    # If it goes well return sucess message (would be empty otherwise) 
-    if r.status_code == requests.codes.ok:
-        return Response({'message': 'token revoked'}, r.status_code)
-    # Return the error if it goes badly
-    return Response(r.json(), r.status_code)
 
 
 
 @api_view(['GET','PUT'])
-def invited_events_home(request,a):
+@permission_classes([IsAuthenticated])
+def invited_events_home(request):
     if request.method == 'GET':
+        a = request.user['id']
         invited_events = models.InvitedEvent.objects.filter(Q(invitedUsers__id = a)|Q(creator__id = a) , time__gte=timezone.now())
         
         serializer = serializers.InvitedEventSerializer(invited_events,many =True)
@@ -128,11 +46,12 @@ def general_events_home(request):
                 return Response(event.errors,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def invite_users(request,id,event_id):
+@permission_classes([IsAuthenticated])
+def invite_users(request,event_id):
         if request.method == 'PUT':
                 event = models.InvitedEvent.objects.get(id=event_id)
                 ser = serializers.InvitedEventSerializer(event)
-                if models.User.objects.get(id = id) == event.creator:        
+                if request.user == event.creator:        
                         for i in request.data['ids']:
                                 user = models.User.objects.get(id = i)
                                 user.save()
@@ -143,15 +62,18 @@ def invite_users(request,id,event_id):
                         return Response(ser.data)
                 return Response("you have no right")
 
-@api_view(['GET'])
-def invited_event_details(request,id,invited_event_id):
-        if request.method == 'GET':
-                event = models.InvitedEvent.objects.get(id = invited_event_id)
-                
-                event_s = serializers.InvitedEventSerializer(event)
-                return Response(event_s.data)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def invited_event_details(request):
+        if request.method == 'POST':
+                event = models.InvitedEvent.objects.get(id=request.data['id'])
+                if (request.user in event.invitedUsers.all()) or request.user == event.creator:
+                        event_s = serializers.InvitedEventSerializer(event)
+                        a = serializers.UserSerializer(request.user)
+                        return Response(a.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def invited_event_comment(request,invited_event_id):
         if request.method == 'GET':
                 comments = models.comments.objects.filter(Event__id == invited_event_id)

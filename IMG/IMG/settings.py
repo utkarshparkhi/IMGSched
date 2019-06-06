@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    
     'oauth2_provider',
+    'users.apps.UsersConfig',
     
 ]
 
@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'IMG.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'IMG2',
+        'NAME':'IMG3',
         "USER":'utkarsh',
         "PASSWORD":'pass',
     }
