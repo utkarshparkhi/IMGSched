@@ -1,11 +1,13 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
-from .serializers import CreateUserSerializer
+from .serializers import CreateUserSerializer,all_username
 from rest_framework import status
 from django.utils import timezone
+from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny,IsAuthenticated
 import requests
+
 CLIENT_ID = 'NAqmM6DgztIkVi898JqJDSBbw0f8HrHVBbP1o5Wf'
 CLIENT_SECRET = 'Y1KIhtHtQGGza7ACfNyMTltFmVgk9NPetizNDPNjTiEDpkHZJ9SeY9eb3AYS8OFAO7KKABrFcLNfZgSXXuWKs7io3hk3CYIM4uw5kDVs0QPwlh7gjiHzL374hpEl1ibl'
 @api_view(['POST'])
@@ -102,3 +104,19 @@ def revoke_token(request):
         return Response({'message': 'token revoked'}, r.status_code)
     # Return the error if it goes badly
     return Response(r.json(), r.status_code)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_username(request,id):
+        u = User.objects.get(pk=id)
+        return Response({'username':u.username})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_all_username(request,id):
+        u = User.objects.all()
+        serializer = all_username(u,many = True)
+        return Response(serializer.data)
+
+

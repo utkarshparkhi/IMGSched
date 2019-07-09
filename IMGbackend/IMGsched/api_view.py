@@ -6,7 +6,7 @@ from . import serializers
 from rest_framework import status
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
-
+from django.contrib.auth.models import User
 from django.db.models import Q
 
 import requests
@@ -15,14 +15,19 @@ import requests
 
 
 @api_view(['GET','PUT'])
+@permission_classes([IsAuthenticated])
 def invited_events_home(request):
     if request.method == 'GET':
         a = request.user
         invited_events = models.InvitedEvent.objects.filter(Q(invitedUsers = a)|Q(creator = a) , time__gte=timezone.now())
         
         serializer = serializers.InvitedEventSerializer(invited_events,many =True)
+        for e in serializer.data:
+                        u = User.objects.get(id = e['creator'])
+                        e['username'] = u.username
         return Response(serializer.data)    
     elif request.method == 'PUT':
+        request.data['creator'] = request.user
         a = serializers.InvitedEventSerializer(data = request.data)
         if a.is_valid():
                 a.save()        
@@ -35,17 +40,29 @@ def invited_events_home(request):
 @permission_classes([IsAuthenticated])
 def general_events_home(request):
         if request.method == 'GET':
-                events = models.GeneralEvent.objects.all()
+                events = models.GeneralEvent.objects.filter(time__gte=timezone.now())
                 serializer = serializers.GeneralEventSerializer(events,many = True)
+                for e in serializer.data:
+                        u = User.objects.get(id = e['creator'])
+                        e['username'] = u.username
                 return Response(serializer.data)
         elif request.method == 'PUT':
+                request.data['creator'] = request.user.id
                 event = serializers.GeneralEventSerializer(data = request.data)
                 if event.is_valid():
                         event.save()
                         return Response(event.data)
                 return Response(event.errors,status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def general_events_detail(request):
+        if request.method == 'GET':
+                event = models.GeneralEvent.objects.get(id = request.id)
+                serializer = serializers.GeneralEventSerializer(event)
+                return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def invite_users(request,event_id):
         if request.method == 'POST':
                 event = models.InvitedEvent.objects.get(id=event_id)
@@ -63,6 +80,7 @@ def invite_users(request,event_id):
                 return Response("you have no right")
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def invited_event_details(request):
         if request.method == 'POST':
                 event = models.InvitedEvent.objects.get(id=request.data['id'])
@@ -72,12 +90,14 @@ def invited_event_details(request):
                         return Response(a.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def invited_event_comment(request,invited_event_id):
         if request.method == 'GET':
                 comments = models.comments.objects.filter(Event__id == invited_event_id)
                 comments_s = serializers.CommentSerializer(comments,many = True)
                 return Response(comments_s.data)
-        
+
+
                 
 
 

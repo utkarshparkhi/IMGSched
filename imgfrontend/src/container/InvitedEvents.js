@@ -3,7 +3,7 @@ import GeneralEventList from '../component/GeneralEventList';
 import axios from 'axios';
 import auth_config from '../token'
 
-class GeneralEvents extends React.Component {
+class InvitedEvents extends React.Component {
     state = {
         generalevents:[]
     }
@@ -11,7 +11,7 @@ class GeneralEvents extends React.Component {
         
         
 
-        axios.get("http://127.0.0.1:8000/IMGsched/generalevents",auth_config).then(res =>  this.setState({generalevents:res.data}))
+        axios.get("http://127.0.0.1:8000/IMGsched/invitedevents",auth_config).then(res =>  this.setState({generalevents:res.data}))
         
     }
     
@@ -33,4 +33,4 @@ class GeneralEvents extends React.Component {
         )
     }
 };
-export default GeneralEvents;
+export default InvitedEvents;

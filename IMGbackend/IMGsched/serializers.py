@@ -4,12 +4,14 @@ from django.contrib.auth.models import User
 class GeneralEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.GeneralEvent
-        fields = ('title','creator','description','time','created_on','location')
+        fields = ('id','title','creator','description','time','created_on','location')
 class InvitedEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.InvitedEvent
-        fields = ('title','creator','description','time','created_on','location','invitedUsers')
+        fields = ('id','title','creator','description','time','created_on','location','invitedUsers')
     
+
+
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
