@@ -5,18 +5,21 @@ import auth_config from '../token'
 
 class InvitedEvents extends React.Component {
     state = {
-        generalevents:[]
+        invitedevents:[]
     }
-    fetchGeneralEvents = () =>{
+    fetchInvitedEvents = () =>{
         
         
 
-        axios.get("http://127.0.0.1:8000/IMGsched/invitedevents",auth_config).then(res =>  this.setState({generalevents:res.data}))
+        axios.get("http://127.0.0.1:8000/IMGsched/invitedevents",auth_config).then(res =>  {
+            
+        
+        this.setState({invitedevents:res.data})})
         
     }
     
     componentDidMount() {
-        this.fetchGeneralEvents()
+        this.fetchInvitedEvents()
         
     }
     componentWillReceiveProps(newProps) {
@@ -27,7 +30,7 @@ class InvitedEvents extends React.Component {
     render(){
         return(
         <div>
-            <GeneralEventList data = {this.state.generalevents}>
+            <GeneralEventList data = {this.state.invitedevents}>
             </GeneralEventList>
         </div>
         )

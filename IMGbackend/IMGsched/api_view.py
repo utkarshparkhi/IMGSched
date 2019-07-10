@@ -19,15 +19,28 @@ import requests
 def invited_events_home(request):
     if request.method == 'GET':
         a = request.user
-        invited_events = models.InvitedEvent.objects.filter(Q(invitedUsers = a)|Q(creator = a) , time__gte=timezone.now())
+        invited_eventsc = models.InvitedEvent.objects.filter(Q(creator = a) , time__gte=timezone.now())
+        invited_eventsi = models.InvitedEvent.objects.filter(Q(invitedUsers = a) , time__gte=timezone.now())
+        invited_events = []
+        for i in invited_eventsc:
+                if i not in invited_eventsi:
+                        
+                        invited_events.append(i)
+        for i in invited_eventsi:
+                invited_events.append(i)
         
         serializer = serializers.InvitedEventSerializer(invited_events,many =True)
         for e in serializer.data:
                         u = User.objects.get(id = e['creator'])
                         e['username'] = u.username
+                        U = []
+                        for i in e['invitedUsers']:
+                                u = User.objects.get(id = i)
+                                U.append(u.username)
+                        e['invitedUsers'] = U
         return Response(serializer.data)    
     elif request.method == 'PUT':
-        request.data['creator'] = request.user
+        request.data['creator'] = request.user.id
         a = serializers.InvitedEventSerializer(data = request.data)
         if a.is_valid():
                 a.save()        
@@ -45,9 +58,11 @@ def general_events_home(request):
                 for e in serializer.data:
                         u = User.objects.get(id = e['creator'])
                         e['username'] = u.username
+                        e['invitedUsers'] = ['all']
                 return Response(serializer.data)
         elif request.method == 'PUT':
                 request.data['creator'] = request.user.id
+                print(request.data['creator'])
                 event = serializers.GeneralEventSerializer(data = request.data)
                 if event.is_valid():
                         event.save()

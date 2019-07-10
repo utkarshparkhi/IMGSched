@@ -18,6 +18,7 @@ const GeneralEventsList =      props =>      (<div><List
           <p>description : {item.description}</p>
           <p>location : {item.location}</p>
           <p>time : {item.time}</p>
+          <p>invited users: {item.invitedUsers.join(', ')}</p>
         </div>
       )
       return (
@@ -27,18 +28,23 @@ const GeneralEventsList =      props =>      (<div><List
         <List.Item.Meta
           avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
           
-          title={<Link to = {`/generalevent/${item.id}`} >{item.title}</Link>}
+          title= {item.title}
           description={item.description}
           
         />
         </Popover>
       </List.Item>
+      
      
     )
     }}
     
   />
-  <Link to = '/generalevents/add'> <Icon style = {{fontSize:'32px'}} type="plus-circle" /> </Link></div>
+  <Link to = '/generalevents/add'> <Icon style = {{fontSize:'32px'}} type="plus-circle" /> </Link>
+  
+  
+  
+  </div>
   )
   
  

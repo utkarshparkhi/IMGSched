@@ -114,9 +114,13 @@ def get_username(request,id):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_all_username(request,id):
-        u = User.objects.all()
+def get_all_username(request):
+        u = User.objects.filter()
+        
         serializer = all_username(u,many = True)
+        for i in serializer.data:
+                i['label'] = i['username']
+                i['value'] = i['id']
         return Response(serializer.data)
 
 

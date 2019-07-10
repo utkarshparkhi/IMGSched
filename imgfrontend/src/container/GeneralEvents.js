@@ -11,7 +11,9 @@ class GeneralEvents extends React.Component {
         
         
 
-        axios.get("http://127.0.0.1:8000/IMGsched/generalevents",auth_config).then(res =>  this.setState({generalevents:res.data}))
+        axios.get("http://127.0.0.1:8000/IMGsched/generalevents",auth_config).then(res =>  
+        {
+        this.setState({generalevents:res.data})})
         
     }
     
