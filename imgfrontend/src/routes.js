@@ -5,12 +5,14 @@ import GeneralEvents from './container/GeneralEvents'
 import InvitedEvents from './container/InvitedEvents'
 import Login from "./container/Login";
 import AieForm from "./container/aieForm";
+import GeneralEventDetail from './container/GeneralEventDetail'
 //import Signup from "./container/Signup";
 
 import ageForm from "./component/addgenereleventform";
 
 const BaseRouter = () => (
-  <div>
+  <div> 
+    <Route exact path='/generalevent/:event_id'component ={GeneralEventDetail} />
     <Route exact path='/invitedevents/add' component = {AieForm} />
     <Route exact path='/invitedevents' component = {InvitedEvents} />
     <Route exact path = '/generalevents/add' component = {ageForm} /> 

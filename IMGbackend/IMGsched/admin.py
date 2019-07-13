@@ -4,4 +4,5 @@ from . import models
 
 admin.site.register(models.GeneralEvent)
 admin.site.register(models.InvitedEvent)
-admin.site.register(models.comments)
+admin.site.register(models.Gcomments)
+admin.site.register(models.Icomments)

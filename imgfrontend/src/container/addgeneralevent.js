@@ -35,6 +35,7 @@ class addGeneralEvent extends React.Component {
         };
         
         return (
+          <div>
           <Form  onSubmit={this.handleSubmit}>
             
             <Form.Item label="Date and time of event">
@@ -97,6 +98,8 @@ class addGeneralEvent extends React.Component {
               </Button>
             </Form.Item>
           </Form>
+          <Link to = '/generalevents/add'> <Icon style = {{fontSize:'32px'}} type="plus-circle" /> </Link>
+          </div>
         );
       }
 }

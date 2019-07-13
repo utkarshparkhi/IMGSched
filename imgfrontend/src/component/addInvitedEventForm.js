@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form,DatePicker,Input ,Button,Checkbox} from 'antd';
-import axios from 'axios';
-import auth_config from '../token'
+
 
 
 const AddInvitedEvent = (props) => (<div>

@@ -13,11 +13,16 @@ class InvitedEventSerializer(serializers.ModelSerializer):
 
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class GCommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.comments
-        fields = ( 'content','user','Event','pub_date')
-    
+        model = models.Gcomments
+        fields = ( 'content','user','gEvent','pub_date')
+
+
+class ICommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Icomments
+        fields = ( 'content','user','iEvent','pub_date')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -33,10 +33,18 @@ class InvitedEvent(models.Model):
 
 
 
-class comments(models.Model):
+class Gcomments(models.Model):
     content = models.CharField(max_length=(100))
     user = models.ForeignKey(User,on_delete=models.PROTECT)
-    Event = models.ForeignKey(GeneralEvent,on_delete=models.CASCADE)
+    gEvent = models.ForeignKey(GeneralEvent,on_delete=models.CASCADE)
+    pub_date = models.DateTimeField(default = timezone.now)
+    class Meta:
+        ordering = ['pub_date']
+
+class Icomments(models.Model):
+    content = models.CharField(max_length=(100))
+    user = models.ForeignKey(User,on_delete=models.PROTECT)
+    iEvent = models.ForeignKey(InvitedEvent,on_delete=models.CASCADE)
     pub_date = models.DateTimeField(default = timezone.now)
     class Meta:
         ordering = ['pub_date']

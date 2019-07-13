@@ -1,11 +1,11 @@
 import React from 'react';
-import { List, Avatar, Popover,Icon } from 'antd';
-import {Link} from 'react-router-dom';
+import { List, Avatar, Popover } from 'antd';
 
 
 
 
-const GeneralEventsList =      props =>      (<div><List
+
+const EventsList =      props =>      (<div><List
     itemLayout="horizontal"
     
     dataSource={props.data}
@@ -40,7 +40,7 @@ const GeneralEventsList =      props =>      (<div><List
     }}
     
   />
-  <Link to = '/generalevents/add'> <Icon style = {{fontSize:'32px'}} type="plus-circle" /> </Link>
+  
   
   
   
@@ -52,5 +52,5 @@ const GeneralEventsList =      props =>      (<div><List
 
    
 
-export default GeneralEventsList;
+export default EventsList;
   

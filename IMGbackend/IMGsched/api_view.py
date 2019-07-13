@@ -70,11 +70,13 @@ def general_events_home(request):
                 return Response(event.errors,status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def general_events_detail(request):
+def general_events_detail(request,event_id):
         if request.method == 'GET':
-                event = models.GeneralEvent.objects.get(id = request.id)
+                event = models.GeneralEvent.objects.get(id = event_id)
                 serializer = serializers.GeneralEventSerializer(event)
-                return Response(serializer.data)
+                e = serializer.data
+                e['invitedUsers'] = ['all']
+                return Response(e)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -101,17 +103,42 @@ def invited_event_details(request):
                 event = models.InvitedEvent.objects.get(id=request.data['id'])
                 if (request.user in event.invitedUsers.all()) or request.user == event.creator:
                         event_s = serializers.InvitedEventSerializer(event)
-                        a = serializers.UserSerializer(request.user)
-                        return Response(a.data)
+                        
+                        return Response(event_s.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def invited_event_comment(request,invited_event_id):
         if request.method == 'GET':
-                comments = models.comments.objects.filter(Event__id == invited_event_id)
-                comments_s = serializers.CommentSerializer(comments,many = True)
-                return Response(comments_s.data)
+                comments = models.Icomments.objects.filter(iEvent__id == invited_event_id)
+                comments_s = serializers.ICommentSerializer(comments,many = True)
+                event = models.InvitedEvent.objects.filter(id=invited_event_id)
 
+                if (request.user in event.invitedUsers.all()) or request.user == event.creator:
+                        for c in comments_s.data:
+                                U = User.objects.get(id=c['user'])
+                                c['user'] = U.username
+                        return Response(comments_s.data)
+                else:
+                        return Response('you are not invited to this event')
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def general_event_comment(request,event_id):
+        if request.method == 'GET':
+                comments = models.Gcomments.objects.filter(gEvent__id = event_id)
+
+                comments_s = serializers.GCommentSerializer(comments,many = True)
+                for c in comments_s.data:
+                        U = User.objects.get(id=c['user'])
+                        c['user'] = U.username
+                
+                
+                
+                return Response(comments_s.data)
+                        
 
                 
 

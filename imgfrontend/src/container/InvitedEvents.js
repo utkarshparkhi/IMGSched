@@ -1,5 +1,5 @@
 import React from 'react';
-import GeneralEventList from '../component/GeneralEventList';
+import EventList from '../component/GeneralEventList';
 import axios from 'axios';
 import auth_config from '../token'
 
@@ -30,8 +30,8 @@ class InvitedEvents extends React.Component {
     render(){
         return(
         <div>
-            <GeneralEventList data = {this.state.invitedevents}>
-            </GeneralEventList>
+            <EventList data = {this.state.invitedevents}>
+            </EventList>
         </div>
         )
     }

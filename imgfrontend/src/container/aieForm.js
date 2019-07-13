@@ -2,6 +2,8 @@ import React from 'react';
 import AddInvitedEvent from '../component/addInvitedEventForm';
 import axios from 'axios'
 import auth_config from '../token'
+import {Icon} from'antd';
+import {Link} from 'react-router-dom'
 class AieForm extends React.Component{
     state = {
         users:[],
@@ -31,8 +33,9 @@ class AieForm extends React.Component{
                   location:location,
                   invitedUsers:invited_users
             },auth_config);
-            
+            this.props.history.push('/');
         }
+
      onChange = (checkedValues) => {
          this.setState({invitedUsers:checkedValues})
         
@@ -44,8 +47,11 @@ class AieForm extends React.Component{
         
 
 
-        return(
-            <AddInvitedEvent data = {this.state.users} handleSubmit = {this.handleSubmit} onChange = {this.onChange}/>
+        return(<div>           <AddInvitedEvent data = {this.state.users} handleSubmit = {this.handleSubmit} onChange = {this.onChange}/>
+ 
+ <Link to = '/invitedevents/add'> <Icon style = {{fontSize:'32px'}} type="plus-circle" /> </Link>
+        </div>
+ 
         )
     }
 
