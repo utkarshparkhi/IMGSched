@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'oauth2_provider',
     'users.apps.UsersConfig',
-    'social_django'
+    'social_django',
+    'channels'
     
 ]
 
@@ -96,7 +97,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'IMG.wsgi.application'
-
+ASGI_APPLICATION = 'IMG.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -148,3 +149,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

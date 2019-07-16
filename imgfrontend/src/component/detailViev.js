@@ -34,19 +34,8 @@ const DetailView = props =>(
                 )
             }
             />
-        asdsadsa
-        <div>
-            <Form>
-    <Form.Item>
-      <TextArea rows={4}  />
-    </Form.Item>
-    <Form.Item>
-      <Button htmlType="submit" type="primary">
-        Add Comment
-      </Button>
-    </Form.Item>
-    </Form>
-  </div>
+        
+       
     </div>
 )
 

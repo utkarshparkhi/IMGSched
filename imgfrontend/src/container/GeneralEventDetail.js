@@ -2,11 +2,15 @@ import React from 'react'
 import DetailView from '../component/detailViev'
 import axios from 'axios'
 import auth_config from '../token'
+import {Form,Input,Button} from 'antd'
 class GeneralEventDetail extends React.Component {
 
     state = {
         data : {},
-        comments:[]
+        comments:[],
+        newComment:'',
+        socket:{},
+        token:localStorage.getItem('token')
     }
 
     fetchComments(){
@@ -24,9 +28,55 @@ class GeneralEventDetail extends React.Component {
     componentDidMount(){
         this.fetchComments();
         this.fetchDetails();
+        
+        var socket = new WebSocket(`ws://127.0.0.1:8000/IMGsched/generalevent/1`    )
+        socket.onopen = e => console.log('open',e)
+        socket.onmessage = e => {
+             console.log('onmessage',e)
+             var final_data = this.state.comments.concat(JSON.parse(e.data))
+
+             this.setState({
+                 comments:final_data
+             })
+            }
+        this.setState({
+            socket:socket
+        })
+    }
+    postComment = (event) => {
+        event.preventDefault()
+        
+        this.state.socket.send(JSON.stringify({
+            message:this.state.newComment,
+            token:this.state.token
+        }))
+        this.setState({
+            newComment:''
+        })
+    }
+    commentonchange = (event) => {  
+        this.setState({
+            newComment:event.target.value
+        })
     }
     render(){
-        return (<DetailView data={this.state.data} comments = {this.state.comments}/>)
+        return (
+            <div>
+        <DetailView data={this.state.data} comments = {this.state.comments}/>
+            
+        
+            <Form onSubmit={this.postComment}>
+            <Form.Item >
+            <Input rows={4} name='comment' onChange={this.commentonchange} value = {this.state.newComment}/>
+            </Form.Item>
+            <Form.Item>
+            <Button htmlType="submit" type="primary">
+                Add Comment
+            </Button>
+            </Form.Item>
+            </Form>
+        </div>
+            )
     }
 
 }

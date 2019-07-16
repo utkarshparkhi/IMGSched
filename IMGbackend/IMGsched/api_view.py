@@ -107,7 +107,7 @@ def invited_event_details(request):
                         return Response(event_s.data)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+
 def invited_event_comment(request,invited_event_id):
         if request.method == 'GET':
                 comments = models.Icomments.objects.filter(iEvent__id == invited_event_id)

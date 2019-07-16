@@ -14,6 +14,7 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.onAuth(values.userName, values.password);
+        localStorage.setItem('username',values.userName)
         this.props.history.push('/');
       }
     });

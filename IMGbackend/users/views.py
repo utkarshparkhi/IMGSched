@@ -107,9 +107,10 @@ def revoke_token(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_username(request,id):
-        u = User.objects.get(pk=id)
-        return Response({'username':u.username})
+def get_username(request):
+        if request.method == 'GET':
+                user = request.user
+                return Response({"id":user.id})
 
 
 @api_view(['GET'])

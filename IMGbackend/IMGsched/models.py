@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
     
 
 class GeneralEvent(models.Model):
-        
+    
     title = models.CharField(max_length = 30)
     creator = models.ForeignKey(User,on_delete=models.CASCADE)
     description = models.CharField(max_length = 200,blank = True)
@@ -34,6 +34,8 @@ class InvitedEvent(models.Model):
 
 
 class Gcomments(models.Model):
+
+    
     content = models.CharField(max_length=(100))
     user = models.ForeignKey(User,on_delete=models.PROTECT)
     gEvent = models.ForeignKey(GeneralEvent,on_delete=models.CASCADE)
