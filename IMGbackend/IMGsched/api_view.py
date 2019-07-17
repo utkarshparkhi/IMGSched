@@ -96,23 +96,30 @@ def invite_users(request,event_id):
                         return Response(ser.data)
                 return Response("you have no right")
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def invited_event_details(request):
-        if request.method == 'POST':
-                event = models.InvitedEvent.objects.get(id=request.data['id'])
+def invited_event_details(request,invited_event_id):
+        if request.method == 'GET':
+                event = models.InvitedEvent.objects.get(id=invited_event_id)
                 if (request.user in event.invitedUsers.all()) or request.user == event.creator:
                         event_s = serializers.InvitedEventSerializer(event)
-                        
-                        return Response(event_s.data)
+                        event_S = event_s.data
+                        a = []
+                        for i in event_S['invitedUsers']:
+                                u = User.objects.get(id = i)
+                                a.append(u.username)
+                        event_S['invitedUsers'] = a
+                        u = User.objects.get(id = event_S['creator'])
+                        event_S['createdBy'] = u.username
+                        return Response(event_S)
 
 @api_view(['GET'])
-
+@permission_classes([IsAuthenticated])
 def invited_event_comment(request,invited_event_id):
         if request.method == 'GET':
-                comments = models.Icomments.objects.filter(iEvent__id == invited_event_id)
+                comments = models.Icomments.objects.filter(iEvent__id = invited_event_id)
                 comments_s = serializers.ICommentSerializer(comments,many = True)
-                event = models.InvitedEvent.objects.filter(id=invited_event_id)
+                event = models.InvitedEvent.objects.get(id=invited_event_id)
 
                 if (request.user in event.invitedUsers.all()) or request.user == event.creator:
                         for c in comments_s.data:

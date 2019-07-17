@@ -9,8 +9,8 @@ urlpatterns = [
     path('generalevents/detail/<int:event_id>',api_view.general_events_detail),
     path('generalevents/comment/<int:event_id>',api_view.general_event_comment),
     path('inviteuser/<int:event_id>/',api_view.invite_users),
-    path('invitedevent/details',api_view.invited_event_details),
-    path('invitedevent/comments/<int:invited_event_id',api_view.invited_event_comment),
+    path('invitedevent/details/<int:invited_event_id>',api_view.invited_event_details),
+    path('invitedevent/comments/<int:invited_event_id>',api_view.invited_event_comment),
     
     path('signup',views.signup),
 
