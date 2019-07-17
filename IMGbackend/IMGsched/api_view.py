@@ -34,6 +34,7 @@ def invited_events_home(request):
                         u = User.objects.get(id = e['creator'])
                         e['username'] = u.username
                         U = []
+                        e['name'] = 'invitedevent'
                         for i in e['invitedUsers']:
                                 u = User.objects.get(id = i)
                                 U.append(u.username)
@@ -59,6 +60,7 @@ def general_events_home(request):
                         u = User.objects.get(id = e['creator'])
                         e['username'] = u.username
                         e['invitedUsers'] = ['all']
+                        e['name'] = 'generalevent'
                 return Response(serializer.data)
         elif request.method == 'PUT':
                 request.data['creator'] = request.user.id
@@ -110,7 +112,7 @@ def invited_event_details(request,invited_event_id):
                                 a.append(u.username)
                         event_S['invitedUsers'] = a
                         u = User.objects.get(id = event_S['creator'])
-                        event_S['createdBy'] = u.username
+                        event_S['creator'] = u.username
                         return Response(event_S)
 
 @api_view(['GET'])

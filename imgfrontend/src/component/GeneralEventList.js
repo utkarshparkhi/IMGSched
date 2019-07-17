@@ -1,7 +1,6 @@
 import React from 'react';
 import { List, Avatar, Popover } from 'antd';
-
-
+import {Link} from 'react-router-dom';
 
 
 
@@ -22,9 +21,11 @@ const EventsList =      props =>      (<div><List
         </div>
       )
       return (
-      
+        
       <List.Item>
+        <Link to = {`${item.name}/${item.id}`}>
         <Popover content = {content} title = {item.title}>
+       
         <List.Item.Meta
           avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
           
@@ -32,9 +33,11 @@ const EventsList =      props =>      (<div><List
           description={item.description}
           
         />
+         
         </Popover>
+        </Link>
       </List.Item>
-      
+     
      
     )
     }}

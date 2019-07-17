@@ -1,6 +1,6 @@
 import React from 'react';
-import {Descriptions,Comment,List,Form,Input,Button} from 'antd';
-const TextArea = Input
+import {Descriptions,Comment,List,} from 'antd';
+
 const DetailView = props =>(
     <div>
     <Descriptions

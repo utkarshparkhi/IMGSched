@@ -36,8 +36,8 @@ class InvitedEventDetail extends React.Component {
     componentDidMount(){
         this.fetchComments();
         this.fetchDetails();
-        
-        var socket = new WebSocket(`ws://127.0.0.1:8000/IMGsched/invitedevent/1`    )
+        const event_id = this.props.match.params.event_id;
+        var socket = new WebSocket(`ws://127.0.0.1:8000/IMGsched/invitedevent/${event_id}`    )
         socket.onopen = e => console.log('open',e)
         socket.onmessage = e => {
              console.log('onmessage',e)
