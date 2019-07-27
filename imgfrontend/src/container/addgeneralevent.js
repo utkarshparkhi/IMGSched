@@ -2,6 +2,8 @@ import React from 'react';
 import { Form, DatePicker, Button,Input } from 'antd';
 import axios from 'axios';
 import auth_config from '../token'
+import {Icon} from'antd';
+import {Link} from 'react-router-dom'
 class addGeneralEvent extends React.Component {
     
     handleSubmit = e => {
@@ -98,7 +100,6 @@ class addGeneralEvent extends React.Component {
               </Button>
             </Form.Item>
           </Form>
-          <Link to = '/generalevents/add'> <Icon style = {{fontSize:'32px'}} type="plus-circle" /> </Link>
           </div>
         );
       }

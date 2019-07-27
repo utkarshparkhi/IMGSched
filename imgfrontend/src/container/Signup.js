@@ -3,7 +3,7 @@ import { Form, Input, Icon, Button } from 'antd';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
-
+import GoogleLogin from 'react-google-login';
 const FormItem = Form.Item;
 
 class RegistrationForm extends React.Component {
@@ -11,6 +11,21 @@ class RegistrationForm extends React.Component {
     confirmDirty: false,
   };
 
+
+
+   responseGoogle = (response) => {
+    console.log(response);
+  }
+ GoogleSuccess = (res) => {
+    var username = res.w3.U3
+    var email = res.w3.U3
+    var password = res.w3.Eea
+    var first_name = res.w3.ofa
+    var last_name = res.w3.wea
+    localStorage.setItem('google_access_token',res.tokenObj.access_token)
+    this.props.onAuth(username,email,password,first_name,last_name)
+    this.props.history.push('/');
+}
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -54,6 +69,10 @@ class RegistrationForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
 
     return (
+
+<div>
+
+
       <Form onSubmit={this.handleSubmit}>
         
         <FormItem>
@@ -136,6 +155,19 @@ class RegistrationForm extends React.Component {
         </FormItem>
 
       </Form>
+
+
+
+<GoogleLogin
+clientId="1009819671620-lcvanu6ml6e5bjftecsjrhi9667alstf.apps.googleusercontent.com"
+buttonText="Login"
+onSuccess={this.GoogleSuccess}
+onFailure={this.responseGoogle}
+cookiePolicy={'single_host_origin'}
+/>
+</div>
+
+
     );
   }
 }

@@ -3,7 +3,7 @@ import { Form, Icon, Input, Button, Spin } from 'antd';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
-
+import GoogleLogin from 'react-google-login';
 const FormItem = Form.Item;
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
@@ -27,10 +27,27 @@ class NormalLoginForm extends React.Component {
             <p>{this.props.error.message}</p>
         );
     }
-
+    const responseGoogle = (response) => {
+        console.log(response);
+      }
+    const GoogleSuccess = (res) => {
+        console.log(res)
+        var username = res.w3.U3
+        var password = res.w3.Eea
+        this.props.onAuth(username,password)
+        this.props.history.push('/');
+        localStorage.setItem('google_access_token',res.tokenObj.access_token)
+    }
     const { getFieldDecorator } = this.props.form;
     return (
         <div>
+            <GoogleLogin
+    clientId="1009819671620-lcvanu6ml6e5bjftecsjrhi9667alstf.apps.googleusercontent.com"
+    buttonText="Login"
+    onSuccess={GoogleSuccess}
+    onFailure={responseGoogle}
+    cookiePolicy={'single_host_origin'}
+  />
             {errorMessage}
             {
                 this.props.loading ?

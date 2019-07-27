@@ -2,7 +2,8 @@ import React from 'react';
 import EventList from '../component/GeneralEventList';
 import axios from 'axios';
 import auth_config from '../token'
-
+import {Icon} from'antd';
+import {Link} from 'react-router-dom'
 class InvitedEvents extends React.Component {
     state = {
         invitedevents:[]
@@ -32,6 +33,7 @@ class InvitedEvents extends React.Component {
         <div>
             <EventList data = {this.state.invitedevents}>
             </EventList>
+            <Link to = '/invitedevents/add'> <Icon style = {{fontSize:'32px'}} type="plus-circle" /> </Link>
         </div>
         )
     }

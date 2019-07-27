@@ -3,6 +3,7 @@ import DetailView from '../component/detailViev'
 import axios from 'axios'
 import auth_config from '../token'
 import {Form,Input,Button} from 'antd'
+import Apicalendar from 'react-google-calendar-api'
 class InvitedEventDetail extends React.Component {
 
     state = {
@@ -33,6 +34,20 @@ class InvitedEventDetail extends React.Component {
             }
         )
     }
+    addToCalendar = () => {
+        var event = {summary:this.state.data.description,
+            'start': {
+                'dateTime': this.state.data.time,
+                
+              },
+              'end': {
+                'dateTime': this.state.data.time,
+              },
+              id:'invited'+this.state.data.id
+            }
+        
+       Apicalendar.createEvent(event).then(res => console.log(res))
+    } 
     componentDidMount(){
         this.fetchComments();
         this.fetchDetails();
@@ -70,6 +85,8 @@ class InvitedEventDetail extends React.Component {
     render(){
         return (
             <div>
+
+                <Button onClick={this.addToCalendar}>add to calendar</Button>
         <DetailView data={this.state.data} comments = {this.state.comments}/>
             
         
@@ -83,6 +100,7 @@ class InvitedEventDetail extends React.Component {
             </Button>
             </Form.Item>
             </Form>
+            
         </div>
             )
     }
